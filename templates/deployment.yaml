@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.traceoverspeedingalert.meta.name }}
+  namespace: {{ .Values.traceoverspeedingalert.meta.namespace }}
+  labels:
+    app: {{ .Values.traceoverspeedingalert.meta.label }}
+spec:
+  replicas: {{ .Values.traceoverspeedingalert.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: {{ .Values.traceoverspeedingalert.rollingupdate.maxunavailable }}
+      maxSurge: {{ .Values.traceoverspeedingalert.rollingupdate.maxsurge }}
+  minReadySeconds: {{ .Values.traceoverspeedingalert.rollingupdate.minreadyseconds }}
+  selector:
+    matchLabels:
+      app: {{ .Values.traceoverspeedingalert.meta.label }}
+  template:
+    metadata:
+      name: {{ .Values.traceoverspeedingalert.meta.name }}
+      labels:
+        app: {{ .Values.traceoverspeedingalert.meta.label }}
+    spec:
+      containers:
+        - name: {{ .Values.traceoverspeedingalert.meta.name }}
+          image: "{{ .Values.traceoverspeedingalert.image.repository }}:{{ .Values.traceoverspeedingalert.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.traceoverspeedingalert.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.traceoverspeedingalert.ports.containerport }}
+              protocol: TCP
+          # command: ["main.js"]  # Add your command here
+          envFrom:
+            - configMapRef:
+                name: trace-overspeeding-alert-configmap
+            # - secretRef:
+            #     name: trace-overspeeding-alert-secret                
+          resources:
+            requests:
+              cpu: {{ .Values.traceoverspeedingalert.requests.cpu }}
+              memory: {{ .Values.traceoverspeedingalert.requests.memory }}
+            limits:
+              cpu: {{ .Values.traceoverspeedingalert.limits.cpu }}
+              memory: {{ .Values.traceoverspeedingalert.limits.memory }}
+          volumeMounts:  # Add the volume mount here
+            - name: pv-overspeed
+              mountPath: /app/appdata
+      volumes:  # Define the volume here
+        - name: pv-overspeed
+          persistentVolumeClaim:
+            claimName: pvc-tracespeed
+      nodeSelector:  # Add the node selector here
+        node: app        
+      # livenessProbe:
+      #   httpGet:
+      #     path: /healthz
+      #     port: {{ .Values.traceoverspeedingalert.httpget.port }}
+      #   initialDelaySeconds: {{ .Values.traceoverspeedingalert.http.initialdelayseconds }}
+      #   timeoutSeconds: {{ .Values.traceoverspeedingalert.http.timeoutseconds }}
+      #   periodSeconds: {{ .Values.traceoverspeedingalert.http.periodseconds }}
+      # readinessProbe:
+      #   httpGet:
+      #     path: /healthz
+      #     port: {{ .Values.traceoverspeedingalert.httpget.port }}
+      #   initialDelaySeconds: {{ .Values.traceoverspeedingalert.http.initialdelayseconds }}
+      #   timeoutSeconds: {{ .Values.traceoverspeedingalert.http.timeoutseconds }}
+      #   periodSeconds: {{ .Values.traceoverspeedingalert.http.periodseconds }}
