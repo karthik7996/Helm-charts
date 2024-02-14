@@ -26,11 +26,27 @@ traceoverspeedingalert:
     maxReplicas: 1
     targetAverageUtilization: 70
   image:
-    repository: 529199640601.dkr.ecr.ap-south-1.amazonaws.com/trace-overspeeding-alert
+    repository: 869361712940.dkr.ecr.ap-south-1.amazonaws.com/trace-overspeeding-alert
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: over-17
+    tag: over-27
   service:
     type: ClusterIP
     port: 80
     targetport: 80
+  vault:
+    env: stag  
+  env:
+    env: "stag"
+    AWS_REGION: "ap-south-1"
+    BOOTSTRAP_SERVER: ""
+    CLIENT_ID: ""
+    GROUP_ID: ""
+    SECURITY_PROTOCOL: ""
+    SASL_MECHANISM: "S2"
+    #SASL_JAAS_CONFIG: ""
+    APPLICATION_ID: ""
+    INPUT_TOPIC: ""
+    ALERT_MANAGER_URL: ""
+    ALERT_SQS_URL: ""
+    ALERT_REDIS_HOST: ""
