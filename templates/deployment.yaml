@@ -31,11 +31,40 @@ spec:
               containerPort: {{ .Values.traceoverspeedingalert.ports.containerport }}
               protocol: TCP
           # command: ["main.js"]  # Add your command here
-          envFrom:
-            - configMapRef:
-                name: trace-overspeeding-alert-configmap
+          # envFrom:
+          #   - configMapRef:
+          #       name: trace-overspeeding-alert-configmap
             # - secretRef:
-            #     name: trace-overspeeding-alert-secret                
+            #     name: trace-overspeeding-alert-secret 
+          env:
+            - name: env
+              value: "{{ .Values.traceoverspeedingalert.env.env }}"
+            - name: AWS_REGION
+              value: "{{ .Values.traceoverspeedingalert.env.AWS_REGION }}"
+            - name: BOOTSTRAP_SERVER
+              value: "{{ .Values.traceoverspeedingalert.env.BOOTSTRAP_SERVER }}"
+            - name: CLIENT_ID
+              value: "{{ .Values.traceoverspeedingalert.env.CLIENT_ID }}"
+            - name: GROUP_ID
+              value: "{{ .Values.traceoverspeedingalert.env.GROUP_ID }}"
+            - name: SECURITY_PROTOCOL
+              value: "{{ .Values.traceoverspeedingalert.env.SECURITY_PROTOCOL }}"
+            - name: SASL_MECHANISM
+              value: "{{ .Values.traceoverspeedingalert.env.SASL_MECHANISM }}"              
+            - name: SASL_JAAS_CONFIG
+              value: "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"username\" password=\"password\";" #"{{ .Values.traceoverspeedingalert.env.SASL_JAAS_CONFIG }}"
+            - name: APPLICATION_ID
+              value: "{{ .Values.traceoverspeedingalert.env.APPLICATION_ID }}"
+            - name: INPUT_TOPIC
+              value: "{{ .Values.traceoverspeedingalert.env.INPUT_TOPIC }}"
+            - name: ALERT_MANAGER_URL
+              value: "{{ .Values.traceoverspeedingalert.env.ALERT_MANAGER_URL }}"
+            - name: REDIS_HOST
+              value: "{{ .Values.traceoverspeedingalert.env.REDIS_HOST }}"
+            - name: ALERT_SQS_URL
+              value: "{{ .Values.traceoverspeedingalert.env.ALERT_SQS_URL }}"
+            - name: ALERT_REDIS_HOST
+              value: "{{ .Values.traceoverspeedingalert.env.ALERT_REDIS_HOST }}"             
           resources:
             requests:
               cpu: {{ .Values.traceoverspeedingalert.requests.cpu }}
@@ -49,7 +78,7 @@ spec:
       volumes:  # Define the volume here
         - name: pv-overspeed
           persistentVolumeClaim:
-            claimName: pvc-tracespeed
+            claimName: pvc-overspeed              
       nodeSelector:  # Add the node selector here
         node: app        
       # livenessProbe:
