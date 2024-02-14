@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.traceoverspeedingalert.meta.name }}
+  namespace: {{ .Values.traceoverspeedingalert.meta.namespace }}
+  labels:
+    app: {{ .Values.traceoverspeedingalert.meta.label }}
+spec:
+  type: {{ .Values.traceoverspeedingalert.service.type }}
+  ports:
+    - port: {{ .Values.traceoverspeedingalert.service.port }}
+      targetPort: {{ .Values.traceoverspeedingalert.service.targetport }}
+      protocol: TCP
+      name: http
+
+  selector:
+    app: {{ .Values.traceoverspeedingalert.meta.label }}
