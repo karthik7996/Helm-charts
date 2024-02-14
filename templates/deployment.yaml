@@ -52,7 +52,7 @@ spec:
             - name: SASL_MECHANISM
               value: "{{ .Values.traceoverspeedingalert.env.SASL_MECHANISM }}"              
             - name: SASL_JAAS_CONFIG
-              value: "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"username\" password=\"password\";" #"{{ .Values.traceoverspeedingalert.env.SASL_JAAS_CONFIG }}"
+              value: "" #"{{ .Values.traceoverspeedingalert.env.SASL_JAAS_CONFIG }}"
             - name: APPLICATION_ID
               value: "{{ .Values.traceoverspeedingalert.env.APPLICATION_ID }}"
             - name: INPUT_TOPIC
