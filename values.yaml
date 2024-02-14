@@ -1,0 +1,36 @@
+traceoverspeedingalert:
+  replicaCount: 1
+  meta:
+    name: trace-overspeeding-alert-service
+    label: trace-overspeeding-alert
+    namespace: trace-overspeeding-alert
+  rollingupdate:
+    maxunavailable: 20%
+    maxsurge: 20%
+  ports:
+    containerport: 80
+  httpget:
+    port: 80
+  http:
+    initialdelayseconds: 60
+    timeoutseconds: 15
+    periodseconds: 30
+  limits:
+    cpu: "512m"
+    memory: "1Gi"
+  requests:
+    cpu: "256m"
+    memory: "500Mi"
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 1
+    targetAverageUtilization: 70
+  image:
+    repository: 529199640601.dkr.ecr.ap-south-1.amazonaws.com/trace-overspeeding-alert
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: over-17
+  service:
+    type: ClusterIP
+    port: 80
+    targetport: 80
